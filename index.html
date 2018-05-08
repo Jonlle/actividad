@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="style.css" rel="stylesheet" type="text/css">
+    <link rel="shortcut icon" href="img/favicon.ico">
+    <title>Formulario de registro de usuario</title>
+    
+</head>
+
+<body>
+    <nav>
+        <h1>Formulario de registro de usuario</h1>
+        <ul>
+            <li><a class="active" href="login.html">Login</a></li>
+            <li><a href="#collage">Collage</a></li>
+            <li><a href="#about">Acerca de</a></li>
+        </ul>
+    </nav>
+    <header>
+        <a href="#"><img id="banner" src="img/signup-banner.jpg" alt="banner"></a>
+    </header>
+    <article>
+        <h2 id="info">Los campos marcados con un (*) son obligatorios.</h2>
+        <form action="javascript:registrarUsuario();" id="formulario">
+            <table>
+                <tr>
+                    <th>Nombre (*)</th>
+                    <td><input type="text" name="name" id="nombre" maxlength="20" minlength="4" required></td>
+                </tr>
+                <tr>
+                    <th>Correo electrónico (*)</th>
+                    <td><input type="email" name="email" id="email" required></td>
+                </tr>
+                <tr>
+                    <th>Contraseña (*)</th>
+                    <td><input type="password" name="pass" id="password" required></td>
+                </tr>
+            </table>
+            <p>
+                <input type="submit" value="Enviar" id="enviar">
+            </p>
+        </form>
+        
+        
+        <section id="collage">
+            <img id="goku" src="img/goku.jpg" alt="goku">
+            <img id="vegueta" src="img/vegueta.jpg" alt="vegueta">
+            <img id="and17" src="img/17.jpg" alt="and17">
+        </section>
+
+    </article>
+
+    <footer>
+        <p id="about">Jhonatan Llerena<br>C.I: 82.298.598<br>Laboratorio #1 (Martes 9:00am - 11:00am)<br>Aplicación de la Tecnologia de Internet</p>
+    </footer>
+
+    <script src="jquery.js"></script>
+    <script>
+        function registrarUsuario() {
+            var nombre_u = $("#nombre").val();
+            var email_u = $("#email").val();
+            var pass_u = $("#password").val();
+
+            $.ajax({
+                data: {
+                    "nombre":nombre_u, 
+                    "email":email_u,
+                    "pass":pass_u
+                },
+                type: "POST",
+                url: "register.php",
+                success: function(datos) {
+                    if (datos.nombre !== "no_ok") {
+                        console.log(datos);
+                        document.getElementById("info").remove();
+                        document.getElementById("formulario").remove();
+                        var mensaje = '<h2 id="mensaje"></h2>'
+                        $("article").prepend(mensaje);
+                        document.getElementById("mensaje").innerHTML = datos.mensaje;
+                    }else{
+                        console.log(datos.mensaje);
+                    }
+                },
+                error: function(xhr, status, error){
+                    alert(status+" "+xhr.status+" ("+error+")");
+                }
+            });
+        };
+    </script>
+</body>
+
+</html>
